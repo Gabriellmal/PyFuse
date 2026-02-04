@@ -27,8 +27,10 @@ The Interface (pyfuse/cli.py): A beautiful Command Line Interface built with Typ
 📦 Installation
 
 If you have downloaded the .whl (wheel) file:
-
-pip install pyfuse-0.1.0-py3-none-any.whl
+open Cmd to the loaction of the file usuing (cd)
+for widnows : pip install pyfuse-0.1.0-cp310-abi3-win_amd64.whl
+Linuex : pip install pyfuse-0.1.0-cp312-cp312-manylinux_2_34_x86_64.whl
+pip install pyfuse-0.1.0-py3-none-any.whl 
 
 
 Once installed, the pyfuse command will be available in your terminal.
