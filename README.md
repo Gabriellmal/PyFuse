@@ -1,94 +1,63 @@
-⚡ PyFuse
+⚡ PyFuse v0.1.1
 
-PyFuse is a high-performance, unified Python toolchain and library organizer. It is designed to be significantly faster than standard tools by offloading heavy directory operations and package scanning to a Rust-powered core engine.
-
-Beyond just installing packages, PyFuse acts as a "Library Manager," allowing you to isolate, move, and toggle libraries across different project folders with ease.
+PyFuse is an ultra-fast Python library organizer and installer. It solves the "messy environment" problem by allowing you to install libraries into isolated folders and switch between them instantly.
 
 🚀 Key Features
 
-Turbo-Charged Scanning: Uses a Rust-based parallel directory scanner (rayon) to list and verify libraries instantly.
+Folder-Based Isolation: Install libraries into any folder and use the use command to ensure your code only sees that specific folder.
 
-Portable Installation: Install any library into a specific folder of your choice using --target logic, making your project dependencies truly portable.
+Rust-Powered Speed: High-speed directory scanning via native Rust extensions.
 
-Library Organizer:
+Smart Moving: Moves libraries and their associated metadata (dist-info) across folders.
 
-Move/Copy: Quickly migrate libraries from one folder to another.
+Toggle State: Enable or disable libraries without deleting them.
 
-Disable/Enable: Temporarily "hide" a library from Python without deleting it (renames to .disabled).
+💻 Commands Guide
 
-Built-in Scaffolding: Create new library containers or structured project folders with one command.
+1. Installation into Folders
 
-Zero-Config Venvs: Handles virtual environment creation automatically when needed.
+Use the --folder or -f flag to target a specific library container.
 
-🛠 Architecture
+# Create a folder for your data science libs
+pyfuse create ds_libs
 
-PyFuse uses a Hybrid Architecture:
-
-The Turbo Core (src/lib.rs): A native Rust extension that handles performance-critical IO operations using multi-threading.
-
-The CLI (pyfuse/cli.py): A modern interface built with Typer and Rich for a premium developer experience.
-
-The Smart Layer (pyfuse/smart.py): Logic for managing file-system level library toggling and directory management.
-
-💻 Usage Guide
-
-1. Installation
-
-If you have built the .whl file using the setup_project.py script:
-
-pip install pyfuse-0.1.0-cp310-abi3-win_amd64.whl
+# Install into that specific folder
+pyfuse install pandas --folder ds_libs
+pyfuse install numpy -f ds_libs
 
 
-2. Creating a Library Container
+2. Organizing & Moving
 
-Create a dedicated folder to hold specific sets of libraries:
+PyFuse ensures that when you move a library, all its parts (including hidden metadata) go with it.
 
-pyfuse create my_libs
-
-
-3. Super-Fast Installation
-
-Install a library directly into your custom folder:
-
-pyfuse install requests my_libs
+# Move 'requests' from one folder to another
+pyfuse move requests old_libs new_libs
 
 
-4. Organizing Libraries
+3. Activating a Folder (Isolation)
 
-List all libraries in a folder (utilizing the Rust parallel engine):
+To make your script use only the libraries in a specific folder:
 
-pyfuse list-libs my_libs
-
-
-Move a library to a different project:
-
-pyfuse move requests my_libs other_project_libs
+pyfuse use ds_libs
 
 
-5. Toggling Libraries
+4. Managing States
 
-Disable a library to test fallback logic or resolve conflicts without uninstalling:
+Disable libraries to test your code without them, or re-enable them later.
 
-pyfuse disable requests my_libs
-# Re-enable it later:
-pyfuse enable requests my_libs
+# Disable 'requests' in the current folder
+pyfuse disable requests --folder my_libs
 
-
-🛠 Development & Building
-
-To compile the Rust core and generate a Windows Wheel on your machine:
-
-Ensure Rust is installed.
-
-Run the automated builder:
-
-python setup_project.py
+# List libraries to see their status
+pyfuse list-libs -f my_libs
 
 
-The wheel will be located in PyFuse/target/wheels/.
+🛠 Advanced Building
 
-📄 License
+To rebuild the Rust core for your Windows machine:
 
-This project is licensed under the MIT License.
+Run python setup_project.py.
 
-Built for speed and organization.
+Install the generated wheel from PyFuse/target/wheels/.
+
+PyFuse: Organize, Move, and Isolate your Python libraries at Rust-speed.
