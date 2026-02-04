@@ -1,96 +1,94 @@
 ⚡ PyFuse
 
-PyFuse is a high-performance, unified Python development toolchain built for the modern era. By combining a core engine written in Rust with a developer-friendly Python CLI, PyFuse provides the speed of native code with the flexibility of the Python ecosystem.
+PyFuse is a high-performance, unified Python toolchain and library organizer. It is designed to be significantly faster than standard tools by offloading heavy directory operations and package scanning to a Rust-powered core engine.
+
+Beyond just installing packages, PyFuse acts as a "Library Manager," allowing you to isolate, move, and toggle libraries across different project folders with ease.
 
 🚀 Key Features
 
-Blazing Fast Core: Dependency resolution and security scanning handled by a native Rust extension (pyfuse_core).
+Turbo-Charged Scanning: Uses a Rust-based parallel directory scanner (rayon) to list and verify libraries instantly.
 
-Smart Environments: Automatic virtual environment management (.venv) with heuristic project detection.
+Portable Installation: Install any library into a specific folder of your choice using --target logic, making your project dependencies truly portable.
 
-Security First: Built-in vulnerability scanner that prevents the installation of known malicious or insecure packages.
+Library Organizer:
 
-Intelligent Scaffolding: Create production-ready project structures with optimal pyproject.toml configurations based on project type.
+Move/Copy: Quickly migrate libraries from one folder to another.
 
-Seamless Fallback: Works out of the box even if the Rust engine isn't compiled, falling back to a pure-Python logic engine.
+Disable/Enable: Temporarily "hide" a library from Python without deleting it (renames to .disabled).
+
+Built-in Scaffolding: Create new library containers or structured project folders with one command.
+
+Zero-Config Venvs: Handles virtual environment creation automatically when needed.
 
 🛠 Architecture
 
 PyFuse uses a Hybrid Architecture:
 
-The Iron Core (src/lib.rs): A Rust library exposed to Python via PyO3. It handles performance-critical tasks like calculating dependency graphs and checking security hashes.
+The Turbo Core (src/lib.rs): A native Rust extension that handles performance-critical IO operations using multi-threading.
 
-The Brain (pyfuse/smart.py): Heuristic logic that detects whether you are building a Django app, a Data Science project, or a Microservice, and adjusts settings accordingly.
+The CLI (pyfuse/cli.py): A modern interface built with Typer and Rich for a premium developer experience.
 
-The Interface (pyfuse/cli.py): A beautiful Command Line Interface built with Typer and Rich for a premium developer experience.
-
-📦 Installation
-
-If you have downloaded the .whl (wheel) file:
-open Cmd to the loaction of the file usuing (cd)
-for widnows : pip install pyfuse-0.1.0-cp310-abi3-win_amd64.whl
-Linuex : pip install pyfuse-0.1.0-cp312-cp312-manylinux_2_34_x86_64.whl
-pip install pyfuse-0.1.0-py3-none-any.whl 
-
-
-Once installed, the pyfuse command will be available in your terminal.
+The Smart Layer (pyfuse/smart.py): Logic for managing file-system level library toggling and directory management.
 
 💻 Usage Guide
 
-1. Create a New Project
+1. Installation
 
-Initialize a structured project with all the necessary files (src/, tests/, .gitignore, pyproject.toml):
+If you have built the .whl file using the setup_project.py script:
 
-pyfuse new my-awesome-app
-cd my-awesome-app
-
-
-2. Setup the Environment
-
-PyFuse manages your virtual environments automatically. No more python -m venv .venv:
-
-pyfuse env create
+pip install pyfuse-0.1.0-cp310-abi3-win_amd64.whl
 
 
-3. Install Packages
+2. Creating a Library Container
 
-Install packages with an integrated security check:
+Create a dedicated folder to hold specific sets of libraries:
 
-pyfuse install requests
-# Or install multiple packages
-pyfuse install pandas numpy matplotlib
+pyfuse create my_libs
 
 
-4. Security Scanning
+3. Super-Fast Installation
 
-If you attempt to install a package known to have critical vulnerabilities (like older versions of log4j), PyFuse will block the installation:
+Install a library directly into your custom folder:
 
-pyfuse install log4j
-# Output: 🚨 Security Block: log4j is unsafe.
+pyfuse install requests my_libs
+
+
+4. Organizing Libraries
+
+List all libraries in a folder (utilizing the Rust parallel engine):
+
+pyfuse list-libs my_libs
+
+
+Move a library to a different project:
+
+pyfuse move requests my_libs other_project_libs
+
+
+5. Toggling Libraries
+
+Disable a library to test fallback logic or resolve conflicts without uninstalling:
+
+pyfuse disable requests my_libs
+# Re-enable it later:
+pyfuse enable requests my_libs
 
 
 🛠 Development & Building
 
-If you are contributing to PyFuse and want to compile the Rust core yourself, you need the maturin build tool:
+To compile the Rust core and generate a Windows Wheel on your machine:
 
-Install Build Tools:
+Ensure Rust is installed.
 
-pip install maturin
+Run the automated builder:
 
-
-Build the Package:
-
-maturin build --release
+python setup_project.py
 
 
-The compiled wheel will be located in target/wheels/.
-
-📝 Configuration
-
-PyFuse generates a pyproject.toml for every project. It uses modern standards (PEP 517/518) and is compatible with other tools like pip, hatch, and ruff.
+The wheel will be located in PyFuse/target/wheels/.
 
 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License.
 
-Built with ❤️ for the Python community.
+Built for speed and organization.
